@@ -1,0 +1,19 @@
+---
+import Icon from './Icon.astro';
+interface Props { eyebrow?: string; icon?: Parameters<typeof Icon>[0]['name']; title: string; lead?: string }
+const { eyebrow, icon, title, lead } = Astro.props;
+---
+
+<header class="relative overflow-hidden">
+  <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand-soft" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute -left-16 top-24 h-40 w-40 rounded-full" style="background: color-mix(in oklab, var(--color-coral) 16%, transparent)" aria-hidden="true"></div>
+  <div class="relative mx-auto max-w-4xl px-5 pt-16 pb-10 text-center sm:pt-24">
+    {eyebrow && (
+      <p class="eyebrow mb-3 justify-center">
+        {icon && <Icon name={icon} class="h-5 w-5" />} {eyebrow}
+      </p>
+    )}
+    <h1 class="text-4xl sm:text-5xl">{title}</h1>
+    {lead && <p class="mx-auto mt-5 max-w-2xl text-xl text-muted">{lead}</p>}
+  </div>
+</header>

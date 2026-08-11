@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+
+const pillars = [
+  { icon: 'github', title: 'Auf offener Technik gebaut', text: 'Skill-Lens nutzt offene Werkzeuge wie React Native, Expo und TensorFlow.js. Die Objekterkennung läuft direkt auf dem Gerät.' },
+  { icon: 'lens', title: 'Offen und nachvollziehbar', text: 'Nichts ist versteckt. Auch der einmalige Modell-Download beim ersten Start wird klar benannt.' },
+  { icon: 'shield', title: 'Datensparsam', text: 'Fotos, Namen und Fortschritt bleiben auf dem Gerät. Es gibt keinen Anbieter-Server für diese Daten.' },
+  { icon: 'heart', title: 'Kein Gewinn', text: 'Die lokale Version ist gratis. Die Cloud-Version deckt nur die echten Serverkosten. Gewinn: 0 Euro.' },
+];
+
+const help = [
+  { icon: 'people', title: 'Pilot testen', text: 'In einer Werkstatt, Wohngruppe oder Familie ausprobieren und ehrlich Rückmeldung geben.' },
+  { icon: 'pencil', title: 'Aufgaben beisteuern', text: 'Gute Alltagsaufgaben und Schritte vorschlagen, die vielen Menschen helfen.' },
+  { icon: 'voice', title: 'Sprache verbessern', text: 'Mithelfen, dass jeder Text wirklich Leichte Sprache ist und gut vorgelesen klingt.' },
+];
+---
+
+<Base title="Open Source · Bewusst offen gebaut">
+  <PageHeader
+    eyebrow="Bewusst offen"
+    icon="github"
+    title="Offen gebaut, ehrlich gemeint"
+    lead="Skill-Lens entsteht auf einer Open-Source-Basis: offen, nachvollziehbar und ohne Gewinnabsicht."
+  />
+
+  <section class="mx-auto max-w-6xl px-5 py-12">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {pillars.map((p) => (
+        <article class="card reveal p-6">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand-soft text-brand-600"><Icon name={p.icon as any} class="h-6 w-6" /></span>
+          <h2 class="mt-4 text-xl">{p.title}</h2>
+          <p class="mt-2 text-lg text-muted">{p.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- NO PROFIT ROW -->
+  <section class="mx-auto max-w-4xl px-5 pb-4">
+    <div class="reveal flex flex-col items-center gap-3 rounded-2xl border-2 border-grass/40 bg-grass-soft p-7 text-center">
+      <span class="grid h-12 w-12 place-items-center rounded-2xl bg-white text-grass"><Icon name="heart" class="h-6 w-6" /></span>
+      <p class="font-display text-2xl font-bold text-ink">Gewinn für den Anbieter: 0 Euro in jeder Version.</p>
+      <p class="text-lg text-muted">Die Cloud-Version gibt es nur, weil ein Server nun einmal Geld kostet. Kein Cent davon ist Gewinn.</p>
+    </div>
+  </section>
+
+  <!-- MITMACHEN -->
+  <section class="border-y border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-5 py-16">
+      <div class="reveal mb-12 max-w-2xl">
+        <p class="eyebrow mb-3"><Icon name="people" class="h-5 w-5" /> Mitmachen</p>
+        <h2 class="text-3xl sm:text-4xl">Hilf mit, es besser zu machen</h2>
+        <p class="mt-4 text-xl text-muted">Skill-Lens lebt von echten Rückmeldungen aus dem Alltag.</p>
+      </div>
+      <div class="grid gap-6 md:grid-cols-3">
+        {help.map((h) => (
+          <article class="reveal rounded-2xl border border-line bg-paper p-6">
+            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-surface-2 text-brand-600"><Icon name={h.icon as any} class="h-6 w-6" /></span>
+            <h3 class="mt-4 text-xl">{h.title}</h3>
+            <p class="mt-2 text-lg text-muted">{h.text}</p>
+          </article>
+        ))}
+      </div>
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a href="/kontakt" class="btn btn-primary">Mitmachen und Kontakt <Icon name="arrow" class="h-5 w-5" /></a>
+        <a href="https://github.com/hackbert301009" rel="me noopener" class="btn btn-secondary"><Icon name="github" class="h-5 w-5" /> GitHub</a>
+      </div>
+    </div>
+  </section>
+</Base>

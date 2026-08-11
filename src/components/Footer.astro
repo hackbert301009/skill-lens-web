@@ -1,0 +1,74 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+
+const cols = [
+  {
+    title: 'Die App',
+    links: [
+      { href: '/funktionen', label: 'So funktioniert es' },
+      { href: '/fuer-wen', label: 'Für wen' },
+      { href: '/leichte-sprache', label: 'In Leichter Sprache' },
+    ],
+  },
+  {
+    title: 'Projekt',
+    links: [
+      { href: '/motivation', label: 'Motivation' },
+      { href: '/open-source', label: 'Open Source' },
+      { href: '/kontakt', label: 'Kontakt' },
+    ],
+  },
+  {
+    title: 'Rechtliches',
+    links: [
+      { href: '/impressum', label: 'Impressum' },
+      { href: '/datenschutz', label: 'Datenschutz' },
+    ],
+  },
+];
+---
+
+<footer class="mt-24 border-t border-line bg-surface">
+  <div class="mx-auto grid max-w-6xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+    <div>
+      <Logo />
+      <p class="mt-4 max-w-xs text-base text-muted">
+        Assistenz-App in Leichter Sprache. Alltag lernen, Schritt für Schritt, selbst geschafft.
+      </p>
+      <p class="mt-4 inline-flex items-center gap-2 rounded-full bg-grass-soft px-3 py-1.5 text-sm font-semibold text-grass">
+        <Icon name="offline" class="h-4 w-4" /> Ohne Cloud. Fotos bleiben auf dem Gerät.
+      </p>
+    </div>
+
+    {
+      cols.map((c) => (
+        <nav aria-label={c.title}>
+          <h2 class="mb-3 font-display text-sm font-bold uppercase tracking-wide text-faint">{c.title}</h2>
+          <ul class="space-y-2">
+            {c.links.map((l) => (
+              <li>
+                <a href={l.href} class="text-ink no-underline hover:text-brand-600 hover:underline">{l.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))
+    }
+  </div>
+
+  <div class="border-t border-line">
+    <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 py-6 text-sm text-muted sm:flex-row">
+      <p>
+        Ein Projekt von <a href="https://hackbert.org" class="font-semibold text-brand-600">Albert Heruth</a>.
+        Gebaut in der Öffentlichkeit.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href="https://github.com/hackbert301009" rel="me noopener" class="inline-flex items-center gap-2 text-ink no-underline hover:text-brand-600">
+          <Icon name="github" class="h-5 w-5" /> GitHub
+        </a>
+        <span class="text-faint">© {new Date().getFullYear()} Skill-Lens</span>
+      </div>
+    </div>
+  </div>
+</footer>

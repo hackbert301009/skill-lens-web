@@ -1,0 +1,212 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import PhoneFrame from '../components/PhoneFrame.astro';
+import { steps, features, tasks, editions } from '../data/site.ts';
+import shotStart from '../assets/shots/shot-start.png';
+
+const toneClass: Record<string, string> = {
+  grass: 'text-grass bg-grass-soft',
+  brand: 'text-brand-600 bg-brand-soft',
+  sun: 'text-[#8a5300] bg-[#fdf0d6]',
+};
+const homeFeatures = features.slice(0, 6);
+---
+
+<Base>
+  <!-- HERO -->
+  <section class="relative overflow-hidden">
+    <div class="pointer-events-none absolute -right-32 -top-40 h-[32rem] w-[32rem] rounded-full bg-brand-soft" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute right-1/3 top-20 h-24 w-24 rounded-full" style="background: color-mix(in oklab, var(--color-sun) 22%, transparent)" aria-hidden="true"></div>
+
+    <div class="relative mx-auto grid max-w-6xl items-center gap-12 px-5 pt-14 pb-8 lg:grid-cols-[1.1fr_0.9fr] lg:pt-20">
+      <div>
+        <p class="chip">
+          <span class="grid h-5 w-5 place-items-center rounded-full bg-sun text-white"><Icon name="star" class="h-3.5 w-3.5" /></span>
+          Assistenz-App · Leichte Sprache · Läuft ohne Cloud
+        </p>
+
+        <h1 class="mt-6 text-5xl leading-[1.02] sm:text-6xl md:text-7xl">
+          Ich schaff <span class="sl-underline">das!</span>
+        </h1>
+        <p class="mt-5 text-2xl font-bold text-brand-600" style="font-family: var(--font-display)">
+          Speziell für Menschen mit Lernschwierigkeiten.
+        </p>
+        <p class="mt-4 max-w-xl text-xl text-muted">
+          Skill-Lens erklärt jede Aufgabe in Leichter Sprache und ruhigen Schritten. Mit großen Knöpfen,
+          Kamera-Hilfe und viel Ermutigung.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/funktionen" class="btn btn-primary">So funktioniert es <Icon name="arrow" class="h-5 w-5" /></a>
+          <a href="/kontakt" class="btn btn-secondary">Kontakt aufnehmen</a>
+        </div>
+
+        <ul class="mt-8 flex flex-wrap gap-3">
+          <li class="chip"><Icon name="voice" class="h-5 w-5 text-brand-600" /> Leichte Sprache</li>
+          <li class="chip"><Icon name="tap" class="h-5 w-5 text-coral-ink" /> Große Knöpfe</li>
+          <li class="chip"><Icon name="report" class="h-5 w-5 text-brand-600" /> Berichte für Betreuende</li>
+        </ul>
+
+        <p class="mt-6 inline-flex items-center gap-2 rounded-full bg-grass-soft px-4 py-2 font-semibold text-grass">
+          <Icon name="offline" class="h-5 w-5" /> Läuft offline. Keine Cloud für deine Fotos.
+        </p>
+      </div>
+
+      <div class="relative mx-auto">
+        <div class="pointer-events-none absolute -inset-6 -z-10 rounded-[3rem] bg-brand-soft" aria-hidden="true"></div>
+        <PhoneFrame src={shotStart} alt="Startbildschirm von Skill-Lens: Frage Was möchtest du heute lernen mit großen Kacheln für Hände waschen, Tisch decken und Kaffee machen." />
+        <div class="absolute -left-4 top-10 chip shadow-lift" style="box-shadow: var(--shadow-lift)">
+          <span class="text-lg">🎉</span> Gut gemacht!
+        </div>
+        <div class="absolute -right-3 bottom-24 chip" style="box-shadow: var(--shadow-lift)">
+          <Icon name="check" class="h-5 w-5 text-grass" /> Schritt 2 von 4
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <section class="mx-auto max-w-6xl px-5 py-10">
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {[
+        { icon: 'offline', t: 'Ohne Cloud', d: 'Fotos bleiben auf dem Gerät.' },
+        { icon: 'voice', t: 'Leichte Sprache', d: 'Alles wird vorgelesen.' },
+        { icon: 'tap', t: 'Große Knöpfe', d: 'Klar, ruhig, gut bedienbar.' },
+        { icon: 'heart', t: 'Ohne Gewinn', d: 'Ein Herzensprojekt, kein Geschäft.' },
+      ].map((x) => (
+        <li class="card reveal flex items-start gap-4 p-5">
+          <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-brand-soft text-brand-600"><Icon name={x.icon as any} class="h-6 w-6" /></span>
+          <span><span class="block font-display text-lg font-bold">{x.t}</span><span class="text-base text-muted">{x.d}</span></span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="mx-auto max-w-6xl px-5 py-16">
+    <div class="reveal mx-auto mb-12 max-w-2xl text-center">
+      <p class="eyebrow mb-3 justify-center"><Icon name="steps" class="h-5 w-5" /> So einfach geht es</p>
+      <h2 class="text-3xl sm:text-4xl">In drei ruhigen Schritten</h2>
+    </div>
+    <ol class="grid gap-6 md:grid-cols-3">
+      {steps.map((s) => (
+        <li class="card reveal p-7">
+          <div class="mb-5 flex items-center gap-3">
+            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand text-white font-display text-xl font-bold">{s.n}</span>
+            <Icon name={s.icon} class="h-7 w-7 text-brand-600" />
+          </div>
+          <h3 class="text-xl">{s.title}</h3>
+          <p class="mt-2 text-lg text-muted">{s.text}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="border-y border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-5 py-16">
+      <div class="reveal mb-12 max-w-2xl">
+        <p class="eyebrow mb-3"><Icon name="lens" class="h-5 w-5" /> Was die App kann</p>
+        <h2 class="text-3xl sm:text-4xl">Hilfe, die wirklich mitdenkt</h2>
+        <p class="mt-4 text-xl text-muted">Keine passive Checkliste. Die Kamera bestätigt jeden Schritt im echten Moment.</p>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {homeFeatures.map((f) => (
+          <article class="reveal rounded-2xl border border-line bg-paper p-6">
+            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand-soft text-brand-600"><Icon name={f.icon} class="h-6 w-6" /></span>
+            <h3 class="mt-4 text-xl">{f.title}</h3>
+            <p class="mt-2 text-lg text-muted">{f.text}</p>
+          </article>
+        ))}
+      </div>
+      <div class="mt-10">
+        <a href="/funktionen" class="btn btn-secondary">Alle Funktionen ansehen <Icon name="arrow" class="h-5 w-5" /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUILT-IN TASKS -->
+  <section class="mx-auto max-w-6xl px-5 py-16">
+    <div class="reveal mb-10 max-w-2xl">
+      <p class="eyebrow mb-3"><Icon name="check" class="h-5 w-5" /> Schon dabei</p>
+      <h2 class="text-3xl sm:text-4xl">Aufgaben aus dem Alltag</h2>
+      <p class="mt-4 text-xl text-muted">Und Betreuende können jederzeit eigene Aufgaben anlegen.</p>
+    </div>
+    <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {tasks.map((t) => (
+        <li class="card reveal flex flex-col items-start gap-3 p-6">
+          <span class="grid h-16 w-16 place-items-center rounded-2xl bg-surface-2 text-4xl" aria-hidden="true">{t.emoji}</span>
+          <span class="font-display text-xl font-bold">{t.name}</span>
+          <span class="text-base text-muted">{t.meta}</span>
+          <span class="mt-1 rounded-full bg-brand-soft px-3 py-1 text-sm font-semibold text-brand-600">{t.cat}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- EDITIONS -->
+  <section class="border-y border-line bg-surface">
+    <div class="mx-auto max-w-5xl px-5 py-16">
+      <div class="reveal mb-10 text-center">
+        <p class="eyebrow mb-3 justify-center"><Icon name="heart" class="h-5 w-5" /> Kein Gewinn, in keiner Version</p>
+        <h2 class="text-3xl sm:text-4xl">Zwei Editionen, beide fair</h2>
+      </div>
+      <div class="grid gap-6 md:grid-cols-2">
+        {editions.map((e) => (
+          <article class:list={['reveal rounded-2xl border-2 bg-paper p-7', e.tone === 'brand' ? 'border-brand' : 'border-line']}>
+            <div class="flex items-center justify-between">
+              <h3 class="text-2xl">{e.name}</h3>
+              <span class={`rounded-full px-3 py-1 text-sm font-bold ${toneClass[e.tone]}`}>{e.tag}</span>
+            </div>
+            <p class="mt-2 font-display text-3xl font-bold text-ink">{e.price}</p>
+            <p class="mt-2 text-lg text-muted">{e.lead}</p>
+            <ul class="mt-5 space-y-2.5">
+              {e.items.map((i) => (
+                <li class="flex items-start gap-2.5 text-lg"><Icon name="check" class="mt-1 h-5 w-5 shrink-0 text-grass" /> {i}</li>
+              ))}
+            </ul>
+            <p class="mt-5 border-t border-line pt-4 text-base text-muted">{e.note}</p>
+          </article>
+        ))}
+      </div>
+      <p class="reveal mx-auto mt-8 max-w-2xl text-center text-lg text-muted">
+        <span class="text-xl">💛</span> Die Cloud-Version gibt es nur, weil ein Server nun einmal Geld kostet. Kein Cent davon ist Gewinn.
+      </p>
+    </div>
+  </section>
+
+  <!-- MOTIVATION TEASER -->
+  <section class="mx-auto max-w-4xl px-5 py-20 text-center">
+    <p class="eyebrow mb-3 justify-center"><Icon name="heart" class="h-5 w-5" /> Warum es das gibt</p>
+    <h2 class="reveal text-3xl sm:text-4xl">Ein Herzensprojekt, kein Geschäft</h2>
+    <p class="reveal mx-auto mt-5 max-w-2xl text-xl text-muted">
+      Skill-Lens soll Menschen mehr Selbstständigkeit geben. Jede Person übt im eigenen Tempo. Ohne Vergleich, ohne Druck.
+    </p>
+    <div class="reveal mt-8 flex flex-wrap justify-center gap-3">
+      <a href="/motivation" class="btn btn-secondary">Die Geschichte lesen <Icon name="arrow" class="h-5 w-5" /></a>
+      <a href="/open-source" class="btn btn-secondary"><Icon name="github" class="h-5 w-5" /> Open Source</a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="mx-auto max-w-5xl px-5 pb-8">
+    <div class="reveal rounded-[2rem] bg-brand px-6 py-14 text-center text-white">
+      <h2 class="text-3xl text-white sm:text-4xl">Interesse für eure Einrichtung?</h2>
+      <p class="mx-auto mt-4 max-w-xl text-xl text-white/90">
+        Für Werkstätten, Wohngruppen, Familien und Förderung. Schreib uns, wir melden uns.
+      </p>
+      <a href="/kontakt" class="btn mt-8 bg-white text-brand-600 hover:bg-white/90">Kontakt aufnehmen</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .sl-underline {
+    position: relative; color: var(--color-coral-ink);
+  }
+  .sl-underline::after {
+    content: ''; position: absolute; left: -2%; right: -2%; bottom: 0.08em; height: 0.28em;
+    background: color-mix(in oklab, var(--color-sun) 60%, transparent); z-index: -1; border-radius: 999px;
+  }
+</style>

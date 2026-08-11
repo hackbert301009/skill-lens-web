@@ -1,0 +1,88 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (p: string) => (p === '/' ? path === '/' : path.startsWith(p));
+
+const links = [
+  { href: '/', label: 'Start' },
+  { href: '/funktionen', label: 'So funktioniert es' },
+  { href: '/fuer-wen', label: 'Für wen' },
+  { href: '/motivation', label: 'Motivation' },
+  { href: '/open-source', label: 'Open Source' },
+];
+---
+
+<header class="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur">
+  <nav class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-3" aria-label="Hauptnavigation">
+    <a href="/" class="rounded-lg" aria-label="Skill-Lens Startseite"><Logo /></a>
+
+    <div class="hidden items-center gap-1 lg:flex">
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            aria-current={isActive(l.href) ? 'page' : undefined}
+            class:list={[
+              'rounded-full px-4 py-2 font-display font-semibold no-underline transition-colors',
+              isActive(l.href) ? 'bg-brand-soft text-brand-600' : 'text-ink hover:bg-surface-2',
+            ]}
+          >
+            {l.label}
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="flex items-center gap-2">
+      <a
+        href="/leichte-sprache"
+        class="hidden items-center gap-2 rounded-full border-2 border-brand-600 px-3.5 py-2 font-display font-semibold text-brand-600 no-underline hover:bg-brand-soft sm:inline-flex"
+      >
+        <Icon name="book" class="h-5 w-5" /> Leichte Sprache
+      </a>
+      <a href="/kontakt" class="btn btn-primary hidden sm:inline-flex">Kontakt</a>
+
+      <button
+        id="nav-toggle"
+        class="grid h-11 w-11 place-items-center rounded-full border border-line text-ink lg:hidden"
+        aria-label="Menü öffnen"
+        aria-expanded="false"
+        aria-controls="nav-mobile"
+      >
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="nav-mobile" class="hidden border-t border-line bg-paper lg:hidden">
+    <div class="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4">
+      {
+        [...links, { href: '/leichte-sprache', label: 'Leichte Sprache' }].map((l) => (
+          <a
+            href={l.href}
+            aria-current={isActive(l.href) ? 'page' : undefined}
+            class:list={[
+              'rounded-xl px-4 py-3 font-display font-semibold no-underline',
+              isActive(l.href) ? 'bg-brand-soft text-brand-600' : 'text-ink hover:bg-surface-2',
+            ]}
+          >
+            {l.label}
+          </a>
+        ))
+      }
+      <a href="/kontakt" class="btn btn-primary mt-2">Kontakt</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('nav-toggle');
+  const menu = document.getElementById('nav-mobile');
+  btn?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('hidden') === false;
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+  });
+</script>

@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+
+const values = [
+  { icon: 'heart', title: 'Aus tiefem Herzen entstanden', text: 'Die App wurde für Menschen mit Lernschwierigkeiten gemacht, nicht für einen Markt. Der Nutzen steht an erster Stelle.' },
+  { icon: 'github', title: 'Bewusst offen', text: 'Skill-Lens ist auf einer Open-Source-Basis aufgebaut, offen und nachvollziehbar. Nichts ist versteckt.' },
+  { icon: 'shield', title: 'Kein Gewinn, in keiner Version', text: 'Die lokale Version ist kostenlos. Die Cloud-Version deckt nur die echten Betriebskosten. In beiden Fällen bleibt nichts übrig, und das ist so gewollt.' },
+  { icon: 'star', title: 'Ohne Vergleich, ohne Druck', text: 'Jede Person übt in ihrem eigenen Tempo. Kein Wettbewerb, nur der eigene Fortschritt und viel Ermutigung.' },
+];
+---
+
+<Base title="Motivation · Warum es Skill-Lens gibt">
+  <PageHeader
+    eyebrow="Warum es das gibt"
+    icon="heart"
+    title="Ein Herzensprojekt, kein Geschäft"
+    lead="Skill-Lens soll Menschen mehr Selbstständigkeit geben. Geld verdienen soll es nicht."
+  />
+
+  <!-- STORY -->
+  <section class="mx-auto max-w-3xl px-5 py-12">
+    <div class="reveal prose text-xl">
+      <p>
+        Alltag besteht aus vielen kleinen Schritten. Genau diese Schritte sind für viele Menschen die eigentliche Hürde.
+      </p>
+      <p>
+        Bestehende Hilfen zeigen, <strong>was</strong> zu tun ist. Aber sie bestätigen nicht, ob ein Schritt wirklich
+        gelungen ist. Deshalb schaut Skill-Lens mit der Kamera mit und bestätigt jeden Schritt im echten Moment,
+        ohne dass jemand ständig danebenstehen muss.
+      </p>
+      <p>
+        So bleibt die Begleitung ruhig und geduldig. Und die Person erlebt: <strong>Ich schaff das, selbst.</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="border-y border-line bg-surface">
+    <div class="mx-auto max-w-5xl px-5 py-16">
+      <div class="reveal mb-12 text-center">
+        <p class="eyebrow mb-3 justify-center"><Icon name="heart" class="h-5 w-5" /> Unsere Haltung</p>
+        <h2 class="text-3xl sm:text-4xl">Wofür Skill-Lens steht</h2>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-2">
+        {values.map((v) => (
+          <article class="reveal rounded-2xl border border-line bg-paper p-7">
+            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand-soft text-brand-600"><Icon name={v.icon as any} class="h-6 w-6" /></span>
+            <h3 class="mt-4 text-xl">{v.title}</h3>
+            <p class="mt-2 text-lg text-muted">{v.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTHOR -->
+  <section class="mx-auto max-w-4xl px-5 py-16 text-center">
+    <div class="reveal card p-8">
+      <p class="eyebrow mb-3 justify-center"><Icon name="lens" class="h-5 w-5" /> Gebaut in der Öffentlichkeit</p>
+      <h2 class="text-2xl sm:text-3xl">Ein Projekt von Albert Heruth</h2>
+      <p class="mx-auto mt-4 max-w-2xl text-xl text-muted">
+        Skill-Lens entsteht offen und Schritt für Schritt. Mehr über die Person und andere Projekte gibt es auf der
+        persönlichen Webseite.
+      </p>
+      <a href="https://hackbert.org" rel="me" class="btn btn-primary mt-7">hackbert.org besuchen <Icon name="arrow" class="h-5 w-5" /></a>
+    </div>
+  </section>
+</Base>

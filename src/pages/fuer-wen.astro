@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+
+const groups = [
+  {
+    icon: 'star',
+    title: 'Menschen mit Lernschwierigkeiten',
+    text: 'Für alle, die Alltagsaufgaben selbst schaffen wollen und dabei ruhige, klare Führung brauchen. Auch für Menschen mit Trisomie 21.',
+  },
+  {
+    icon: 'people',
+    title: 'Angehörige und Betreuende',
+    text: 'Für Familien und Fachkräfte, die begleiten, anleiten und den Fortschritt festhalten. Ohne bei jedem Schritt danebenstehen zu müssen.',
+  },
+  {
+    icon: 'report',
+    title: 'Einrichtungen',
+    text: 'Für Werkstätten, Wohngruppen sowie Förder- und Reha-Angebote. Mehrere Personen teilen sich ein Gerät, jede mit eigenem Profil.',
+  },
+];
+
+const problem = [
+  { icon: 'heart', title: 'Selbst machen wollen, Begleitung brauchen', text: 'Der Wille ist da. Die vielen kleinen Schritte sind die eigentliche Hürde.' },
+  { icon: 'people', title: 'Betreuende haben wenig Zeit', text: 'Niemand kann bei jedem einzelnen Schritt danebenstehen. Ständiges Erinnern ist anstrengend.' },
+  { icon: 'check', title: 'Checklisten zeigen nicht, ob es geklappt hat', text: 'Bilder und Videos sagen, was zu tun ist. Aber nicht, ob der Schritt wirklich gelungen ist.' },
+];
+---
+
+<Base title="Für wen ist Skill-Lens?">
+  <PageHeader
+    eyebrow="Für Menschen, die selbst machen wollen"
+    icon="heart"
+    title="Für wen ist Skill-Lens?"
+    lead="Für Menschen mit Lernschwierigkeiten und die Menschen, die sie begleiten. Mit Respekt und auf Augenhöhe."
+  />
+
+  <section class="mx-auto max-w-6xl px-5 py-12">
+    <div class="grid gap-6 md:grid-cols-3">
+      {groups.map((g) => (
+        <article class="card reveal p-7">
+          <span class="grid h-14 w-14 place-items-center rounded-2xl bg-brand-soft text-brand-600"><Icon name={g.icon as any} class="h-7 w-7" /></span>
+          <h2 class="mt-4 text-xl">{g.title}</h2>
+          <p class="mt-2 text-lg text-muted">{g.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- THE PROBLEM -->
+  <section class="border-y border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-5 py-16">
+      <div class="reveal mb-12 max-w-2xl">
+        <p class="eyebrow mb-3"><Icon name="lens" class="h-5 w-5" /> Die Ausgangslage</p>
+        <h2 class="text-3xl sm:text-4xl">Warum es einen Unterschied macht</h2>
+      </div>
+      <div class="grid gap-6 md:grid-cols-3">
+        {problem.map((p) => (
+          <article class="reveal rounded-2xl border border-line bg-paper p-6">
+            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-surface-2 text-coral-ink"><Icon name={p.icon as any} class="h-6 w-6" /></span>
+            <h3 class="mt-4 text-xl">{p.title}</h3>
+            <p class="mt-2 text-lg text-muted">{p.text}</p>
+          </article>
+        ))}
+      </div>
+      <p class="reveal mt-10 max-w-3xl text-2xl font-bold text-ink" style="font-family: var(--font-display)">
+        Genau hier setzt Skill-Lens an. Die Kamera bestätigt jeden Schritt im echten Moment, ohne dass jemand ständig danebenstehen muss.
+      </p>
+    </div>
+  </section>
+
+  <!-- STANCE -->
+  <section class="mx-auto max-w-4xl px-5 py-16 text-center">
+    <p class="eyebrow mb-3 justify-center"><Icon name="heart" class="h-5 w-5" /> Unsere Haltung</p>
+    <h2 class="reveal text-3xl sm:text-4xl">Ohne Vergleich, ohne Druck</h2>
+    <p class="reveal mx-auto mt-5 max-w-2xl text-xl text-muted">
+      Jede Person übt in ihrem eigenen Tempo. Es gibt keine Punkte gegen andere, nur den eigenen Fortschritt und viel Ermutigung.
+    </p>
+    <a href="/kontakt" class="btn btn-primary mt-8">Für eure Einrichtung anfragen <Icon name="arrow" class="h-5 w-5" /></a>
+  </section>
+</Base>

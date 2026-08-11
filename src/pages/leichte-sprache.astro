@@ -1,0 +1,101 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+
+const blocks = [
+  {
+    icon: 'lens',
+    head: 'Was ist Skill-Lens?',
+    lines: [
+      'Skill-Lens ist eine App.',
+      'Eine App ist ein Programm für das Handy.',
+      'Die App hilft dir bei Aufgaben im Alltag.',
+      'Zum Beispiel: Hände waschen.',
+      'Oder: einen Tisch decken.',
+    ],
+  },
+  {
+    icon: 'steps',
+    head: 'Wie hilft die App?',
+    lines: [
+      'Die App zeigt dir kleine Schritte.',
+      'Sie liest dir alles laut vor.',
+      'Die Kamera vom Handy schaut mit.',
+      'Die App sieht: Du hast den Schritt geschafft.',
+      'Dann sagt die App: Das hast du gut gemacht.',
+    ],
+  },
+  {
+    icon: 'heart',
+    head: 'Das ist gut für dich',
+    lines: [
+      'Du machst die Aufgabe selbst.',
+      'Du bestimmst dein Tempo.',
+      'Es gibt keinen Stress.',
+      'Es gibt keine schlechte Note.',
+    ],
+  },
+  {
+    icon: 'shield',
+    head: 'Deine Daten sind sicher',
+    lines: [
+      'Deine Fotos bleiben auf dem Handy.',
+      'Niemand anderes sieht deine Fotos.',
+      'Die App schickt deine Fotos nicht ins Internet.',
+    ],
+  },
+  {
+    icon: 'star',
+    head: 'Was kostet die App?',
+    lines: [
+      'Die App auf dem Handy ist kostenlos.',
+      'Du musst nichts bezahlen.',
+    ],
+  },
+];
+---
+
+<Base title="Skill-Lens in Leichter Sprache">
+  <div class="ls">
+    <!-- HEADER -->
+    <header class="border-b border-line bg-brand-soft">
+      <div class="mx-auto max-w-3xl px-5 py-14 text-center">
+        <p class="mx-auto inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 font-semibold text-brand-600">
+          <Icon name="book" class="h-5 w-5" /> Diese Seite ist in Leichter Sprache
+        </p>
+        <h1 class="mt-6 text-4xl sm:text-5xl">Skill-Lens einfach erklärt</h1>
+        <p class="mx-auto mt-4 max-w-xl text-2xl text-muted">Hier steht in einfachen Worten, was die App macht.</p>
+      </div>
+    </header>
+
+    <!-- BLOCKS -->
+    <div class="mx-auto max-w-3xl px-5 py-14">
+      <div class="flex flex-col gap-8">
+        {blocks.map((b) => (
+          <section class="reveal rounded-3xl border-2 border-line bg-paper p-7 sm:p-8">
+            <div class="flex items-center gap-4">
+              <span class="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-brand-soft text-brand-600"><Icon name={b.icon as any} class="h-8 w-8" /></span>
+              <h2 class="text-3xl">{b.head}</h2>
+            </div>
+            <ul class="mt-6 flex flex-col gap-3">
+              {b.lines.map((l) => (
+                <li class="flex items-start gap-3 text-2xl leading-snug">
+                  <Icon name="check" class="mt-1.5 h-6 w-6 shrink-0 text-grass" />
+                  <span>{l}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+
+        <!-- CONTACT -->
+        <section class="reveal rounded-3xl bg-brand p-8 text-center text-white">
+          <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-white/15"><Icon name="mail" class="h-8 w-8" /></span>
+          <h2 class="mt-5 text-3xl text-white">Du willst die App?</h2>
+          <p class="mx-auto mt-3 max-w-md text-2xl text-white/90">Schreib uns eine Nachricht. Wir helfen dir gern.</p>
+          <a href="/kontakt" class="btn mt-7 bg-white text-brand-600 hover:bg-white/90">Nachricht schreiben <Icon name="arrow" class="h-5 w-5" /></a>
+        </section>
+      </div>
+    </div>
+  </div>
+</Base>
