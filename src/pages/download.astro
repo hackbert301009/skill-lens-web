@@ -1,0 +1,156 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+
+// 🔧 Vor dem Veröffentlichen anpassen:
+// 1) Echte .apk in public/downloads/skill-lens.apk ablegen (Ordner selbst anlegen).
+// 2) Version, Dateigröße und Datum unten aktualisieren.
+const APK_PATH = '/downloads/skill-lens.apk';
+const APP_VERSION = '1.0.0';
+const APP_SIZE = '25 MB';
+const APP_UPDATED = 'August 2026';
+
+const steps = [
+  {
+    icon: 'download' as const,
+    title: 'Datei holen',
+    text: 'Tipp weiter unten auf den großen Knopf. skill-lens.apk landet in ein paar Sekunden auf deinem Handy. Schneller, als dieser Satz zu lesen war.',
+  },
+  {
+    icon: 'pin' as const,
+    title: 'Kurz mutig sein',
+    text: 'Skill-Lens kommt nicht aus dem Play Store, darum meldet sich dein Handy einmal zu Wort. Das ist völlig normal. Tipp auf Einstellungen und erlaube die Installation für diese eine App.',
+  },
+  {
+    icon: 'check' as const,
+    title: 'Installieren',
+    text: 'Öffne die heruntergeladene Datei noch einmal und tipp auf Installieren. Mehr Arbeit ist das wirklich nicht.',
+  },
+  {
+    icon: 'star' as const,
+    title: 'Loslegen',
+    text: 'Öffne Skill-Lens auf dem Startbildschirm. Die erste Aufgabe wartet schon, vielleicht sogar der erste Sticker gleich mit dazu.',
+  },
+];
+
+const faqs = [
+  {
+    q: 'Warum kommt Skill-Lens nicht aus dem Play Store?',
+    a: 'Ganz ehrlich: der Play Store kostet Gebühren und verlangt einiges an Bürokratie für ein Ein-Personen-Herzensprojekt. Der direkte Weg über diese Seite ist genauso sicher, nur schneller für dich und mich.',
+  },
+  {
+    q: 'Ist die Warnmeldung beim Installieren gefährlich?',
+    a: 'Nein. Dein Handy warnt bei jeder App außerhalb des Play Stores, egal wie vertrauenswürdig sie ist. Das ist Android, das seinen Job macht, keine Sicherheitslücke.',
+  },
+  {
+    q: 'Was passiert mit meinen Daten und Fotos?',
+    a: 'Nichts, was du nicht willst. Skill-Lens läuft offline, Fotos und Fortschritt bleiben auf dem Gerät. Mehr dazu in der Datenschutzerklärung.',
+  },
+  {
+    q: 'Und wenn beim Installieren trotzdem etwas hakt?',
+    a: 'Dann meld dich einfach über den Feedback-Knopf unten rechts oder direkt per Kontaktformular. Ich lese wirklich jede Nachricht selbst.',
+  },
+];
+---
+
+<Base
+  title="App herunterladen · Skill-Lens installieren"
+  description="Skill-Lens als APK herunterladen und in vier ruhigen Schritten installieren. Kostenlos, ohne Konto, direkt von der Webseite."
+>
+  <PageHeader
+    eyebrow="📲 Direkt von mir zu dir"
+    icon="download"
+    title="Skill-Lens aufs Handy holen"
+    lead="Kein Play Store, kein Konto, keine Warteschlange. Nur du, dein Handy und vier kleine Schritte, die wirklich jeder schafft."
+  />
+
+  <!-- TRUST -->
+  <section class="mx-auto max-w-4xl px-5">
+    <div class="card reveal flex flex-col items-start gap-4 p-6 sm:flex-row sm:items-center sm:p-7">
+      <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-grass-soft text-grass"><Icon name="shield" class="h-6 w-6" /></span>
+      <div>
+        <h2 class="text-xl">Ehrlich gesagt: das ist unbedenklich</h2>
+        <p class="mt-1 text-lg text-muted">
+          Die Datei kommt direkt von dieser Webseite, verschlüsselt per HTTPS, genau wie diese Seite selbst.
+          Ich habe den Code auch selbst geschrieben, und du musst mir nicht einmal glauben:
+          <a href="/open-source" class="font-semibold text-brand-600">schau ihn dir auf GitHub an</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEPS -->
+  <section class="mx-auto max-w-6xl px-5 py-16">
+    <div class="reveal mx-auto mb-12 max-w-2xl text-center">
+      <p class="eyebrow mb-3 justify-center"><Icon name="steps" class="h-5 w-5" /> Die Installation in echt</p>
+      <h2 class="text-3xl sm:text-4xl">Vier Schritte, kein Stress</h2>
+    </div>
+    <ol class="grid gap-6 md:grid-cols-2">
+      {steps.map((s, i) => (
+        <li class="card reveal p-7">
+          <div class="mb-5 flex items-center gap-3">
+            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand text-white font-display text-xl font-bold">{i + 1}</span>
+            <Icon name={s.icon} class="h-7 w-7 text-brand-600" />
+          </div>
+          <h3 class="text-xl">{s.title}</h3>
+          <p class="mt-2 text-lg text-muted">{s.text}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- DOWNLOAD CTA -->
+  <section class="mx-auto max-w-4xl px-5 pb-4">
+    <div class="reveal rounded-[2rem] border-2 border-brand bg-brand-soft px-6 py-14 text-center">
+      <p class="chip mx-auto">
+        <span class="grid h-5 w-5 place-items-center rounded-full bg-sun text-white"><Icon name="star" class="h-3.5 w-3.5" /></span>
+        Nur noch ein Klick
+      </p>
+      <h2 class="mt-5 text-3xl sm:text-4xl">Bereit für Skill-Lens?</h2>
+      <p class="mx-auto mt-3 max-w-md text-xl text-muted">Kostenlos · Für Android · Ohne Konto</p>
+      <a class="btn btn-primary mt-8 text-lg" href={APK_PATH} download>
+        <Icon name="download" class="h-5 w-5" /> Skill-Lens herunterladen
+      </a>
+      <p class="mt-4 text-base text-muted">Version {APP_VERSION} · ca. {APP_SIZE} · Stand {APP_UPDATED}</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="mx-auto max-w-3xl px-5 py-16">
+    <div class="reveal mb-10 max-w-2xl">
+      <p class="eyebrow mb-3"><Icon name="chat" class="h-5 w-5" /> Bevor es losgeht</p>
+      <h2 class="text-3xl sm:text-4xl">Kurze Fragen, kurze Antworten</h2>
+    </div>
+    <div class="flex flex-col gap-4">
+      {faqs.map((f) => (
+        <details class="reveal card group p-6">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-bold text-ink">
+            {f.q}
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-soft text-brand-600">
+              <Icon name="close" class="h-4 w-4 rotate-45 transition-transform duration-200 group-open:rotate-0" />
+            </span>
+          </summary>
+          <p class="mt-3 text-lg text-muted">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- HELP -->
+  <section class="mx-auto max-w-4xl px-5 pb-24">
+    <div class="reveal flex flex-col items-start gap-4 rounded-2xl border border-line bg-surface p-6 sm:flex-row sm:items-center sm:p-7">
+      <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-coral/10 text-coral-ink"><Icon name="heart" class="h-6 w-6" /></span>
+      <div class="flex-1">
+        <h2 class="text-xl">Klemmt es doch irgendwo?</h2>
+        <p class="mt-1 text-lg text-muted">Kein Drama. Meld dich, ich helfe dir persönlich weiter.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button type="button" class="btn btn-primary" data-open-feedback="support">
+          <Icon name="chat" class="h-5 w-5" /> Support anfragen
+        </button>
+        <a href="/kontakt" class="btn btn-secondary">Kontaktformular</a>
+      </div>
+    </div>
+  </section>
+</Base>

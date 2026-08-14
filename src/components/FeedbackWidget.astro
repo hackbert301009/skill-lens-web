@@ -1,0 +1,346 @@
+---
+// Schwebender Feedback-Knopf + Modal, auf jeder Seite verfügbar (eingebunden in Base.astro).
+// Bewertung (Sterne) und Support/Beschwerde laufen über dasselbe Formspree-Postfach wie /kontakt,
+// nur mit eigenem Betreff, damit du beides sauber auseinanderhalten kannst.
+import Icon from './Icon.astro';
+
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xeolbyyz';
+
+const ratingCaptions: Record<string, string> = {
+  '1': 'Autsch. Erzähl uns, was schiefging.',
+  '2': 'Da geht noch was. Wir hören zu.',
+  '3': 'Okay, aber Luft nach oben ist da.',
+  '4': 'Schön! Was hätte noch zum 5. Stern gefehlt?',
+  '5': 'Yes! Das freut uns richtig.',
+};
+---
+
+<button
+  id="fw-trigger"
+  type="button"
+  class="fw-trigger btn btn-primary"
+  aria-haspopup="dialog"
+  aria-controls="fw-dialog"
+  data-open-feedback="bewertung"
+>
+  <Icon name="chat" class="h-5 w-5" />
+  <span class="fw-trigger-label">Feedback</span>
+</button>
+
+<div id="fw-backdrop" class="fw-backdrop" hidden></div>
+
+<div
+  id="fw-dialog"
+  class="fw-dialog"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="fw-title"
+  hidden
+>
+  <button id="fw-close" type="button" class="fw-close" aria-label="Fenster schließen">
+    <Icon name="close" class="h-5 w-5" />
+  </button>
+
+  <div class="fw-head">
+    <p class="eyebrow mb-2"><Icon name="heart" class="h-5 w-5" /> Kurz und persönlich</p>
+    <h2 id="fw-title" class="text-2xl">Sag uns, was du denkst</h2>
+    <p class="mt-1 text-base text-muted">Ein echter Mensch liest jede Nachricht. Versprochen.</p>
+  </div>
+
+  <div class="fw-tabs" role="tablist" aria-label="Was möchtest du tun">
+    <button type="button" class="fw-tab is-active" role="tab" aria-selected="true" data-mode="bewertung">
+      <Icon name="star" class="h-5 w-5" /> Bewertung
+    </button>
+    <button type="button" class="fw-tab" role="tab" aria-selected="false" data-mode="support">
+      <Icon name="heart" class="h-5 w-5" /> Support / Beschwerde
+    </button>
+  </div>
+
+  <form id="fw-form" action={FORMSPREE_ENDPOINT} method="POST">
+    <input type="hidden" name="_subject" id="fw-subject" value="⭐ Neue Bewertung über Skill-Lens" />
+    <input type="hidden" name="Typ" id="fw-typ" value="Bewertung" />
+    <input type="hidden" name="Sterne" id="fw-rating-value" value="" />
+    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+    <div id="fw-stars-block" class="fw-stars-block">
+      <span class="mb-2 block font-semibold text-ink">Wie gefällt dir Skill-Lens?</span>
+      <div class="fw-stars" role="radiogroup" aria-label="Bewertung in Sternen">
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button
+            type="button"
+            class="fw-star"
+            role="radio"
+            aria-checked="false"
+            aria-label={`${n} von 5 Sternen`}
+            data-star={n}
+          >
+            <Icon name="star" class="h-8 w-8" />
+          </button>
+        ))}
+      </div>
+      <p id="fw-star-caption" class="mt-2 min-h-6 text-base font-semibold text-brand-600">Tipp auf einen Stern.</p>
+    </div>
+
+    <label class="mt-5 block">
+      <span id="fw-message-label" class="mb-2 block font-semibold text-ink">Magst du das kurz erklären? (freiwillig)</span>
+      <textarea
+        name="Nachricht"
+        id="fw-message"
+        rows="4"
+        placeholder="Was hat dir gefallen, was hat gefehlt?"
+        class="w-full rounded-2xl border-2 border-line bg-paper px-4 py-3 text-lg text-ink outline-none transition focus:border-brand"></textarea>
+    </label>
+
+    <div class="mt-5 grid gap-5 sm:grid-cols-2">
+      <label class="block">
+        <span class="mb-2 block font-semibold text-ink">Dein Name (freiwillig)</span>
+        <input type="text" name="Name" autocomplete="name"
+          class="w-full rounded-2xl border-2 border-line bg-paper px-4 py-3 text-lg text-ink outline-none transition focus:border-brand" />
+      </label>
+      <label class="block">
+        <span id="fw-email-label" class="mb-2 block font-semibold text-ink">E-Mail (freiwillig)</span>
+        <input type="email" name="E-Mail" id="fw-email" autocomplete="email"
+          class="w-full rounded-2xl border-2 border-line bg-paper px-4 py-3 text-lg text-ink outline-none transition focus:border-brand" />
+      </label>
+    </div>
+    <p id="fw-email-hint" class="mt-2 text-sm text-muted">Nur nötig, wenn du eine Antwort möchtest.</p>
+
+    <div class="mt-6 flex flex-wrap items-center gap-4">
+      <button type="submit" id="fw-submit" class="btn btn-primary">
+        <span id="fw-submit-label">Bewertung senden</span> <Icon name="send" class="h-5 w-5" />
+      </button>
+      <p id="fw-status" class="text-lg font-semibold" role="status" aria-live="polite"></p>
+    </div>
+    <p class="mt-4 text-sm text-muted">
+      Mit dem Absenden bist du einverstanden, dass wir deine Angaben zur Beantwortung nutzen. Mehr in der
+      <a href="/datenschutz" class="font-semibold text-brand-600">Datenschutzerklärung</a>.
+    </p>
+  </form>
+</div>
+
+<script define:vars={{ ratingCaptions }}>
+  const trigger = document.getElementById('fw-trigger');
+  const backdrop = document.getElementById('fw-backdrop');
+  const dialog = document.getElementById('fw-dialog');
+  const closeBtn = document.getElementById('fw-close');
+  const tabs = Array.from(document.querySelectorAll('.fw-tab'));
+  const starsBlock = document.getElementById('fw-stars-block');
+  const stars = Array.from(document.querySelectorAll('.fw-star'));
+  const starCaption = document.getElementById('fw-star-caption');
+  const ratingInput = document.getElementById('fw-rating-value');
+  const subjectInput = document.getElementById('fw-subject');
+  const typInput = document.getElementById('fw-typ');
+  const messageLabel = document.getElementById('fw-message-label');
+  const message = document.getElementById('fw-message');
+  const emailLabel = document.getElementById('fw-email-label');
+  const emailHint = document.getElementById('fw-email-hint');
+  const email = document.getElementById('fw-email');
+  const submitLabel = document.getElementById('fw-submit-label');
+  const submitBtn = document.getElementById('fw-submit');
+  const status = document.getElementById('fw-status');
+  const form = document.getElementById('fw-form');
+  let lastFocused = null;
+
+  function setRating(n) {
+    ratingInput.value = String(n);
+    stars.forEach((s) => {
+      const val = Number(s.dataset.star);
+      s.classList.toggle('is-filled', val <= n);
+      s.setAttribute('aria-checked', val === n ? 'true' : 'false');
+    });
+    starCaption.textContent = ratingCaptions[String(n)] || '';
+  }
+
+  function setMode(mode) {
+    tabs.forEach((t) => {
+      const active = t.dataset.mode === mode;
+      t.classList.toggle('is-active', active);
+      t.setAttribute('aria-selected', String(active));
+    });
+    if (mode === 'support') {
+      starsBlock.hidden = true;
+      typInput.value = 'Support / Beschwerde';
+      subjectInput.value = '🆘 Support-Anfrage über Skill-Lens';
+      messageLabel.textContent = 'Wobei können wir helfen?';
+      message.placeholder = 'Beschreib kurz, was nicht funktioniert oder wo es hakt.';
+      message.required = true;
+      emailLabel.textContent = 'E-Mail (für die Antwort)';
+      emailHint.textContent = 'Ohne E-Mail können wir dir leider nicht antworten.';
+      email.required = true;
+      submitLabel.textContent = 'Anfrage senden';
+      document.getElementById('fw-title').textContent = 'Wobei dürfen wir helfen?';
+    } else {
+      starsBlock.hidden = false;
+      typInput.value = 'Bewertung';
+      subjectInput.value = '⭐ Neue Bewertung über Skill-Lens';
+      messageLabel.textContent = 'Magst du das kurz erklären? (freiwillig)';
+      message.placeholder = 'Was hat dir gefallen, was hat gefehlt?';
+      message.required = false;
+      emailLabel.textContent = 'E-Mail (freiwillig)';
+      emailHint.textContent = 'Nur nötig, wenn du eine Antwort möchtest.';
+      email.required = false;
+      submitLabel.textContent = 'Bewertung senden';
+      document.getElementById('fw-title').textContent = 'Sag uns, was du denkst';
+    }
+  }
+
+  function openModal(mode) {
+    lastFocused = document.activeElement;
+    setMode(mode || 'bewertung');
+    backdrop.hidden = false;
+    dialog.hidden = false;
+    document.body.style.overflow = 'hidden';
+    const firstField = mode === 'support' ? message : stars[0];
+    firstField?.focus();
+  }
+
+  function closeModal() {
+    backdrop.hidden = true;
+    dialog.hidden = true;
+    document.body.style.overflow = '';
+    lastFocused?.focus?.();
+  }
+
+  document.addEventListener('click', (e) => {
+    const opener = e.target.closest('[data-open-feedback]');
+    if (opener) {
+      e.preventDefault();
+      openModal(opener.dataset.openFeedback);
+    }
+  });
+
+  closeBtn?.addEventListener('click', closeModal);
+  backdrop?.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !dialog.hidden) closeModal();
+  });
+
+  tabs.forEach((t) => t.addEventListener('click', () => setMode(t.dataset.mode)));
+  stars.forEach((s) => s.addEventListener('click', () => setRating(Number(s.dataset.star))));
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (typInput.value === 'Bewertung' && !ratingInput.value) {
+      status.textContent = 'Magst du kurz einen Stern antippen?';
+      status.style.color = 'var(--color-coral-ink)';
+      return;
+    }
+    submitBtn.disabled = true;
+    status.textContent = 'Wird gesendet ...';
+    status.style.color = 'var(--color-muted)';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+      if (res.ok) {
+        status.textContent = 'Danke dir! Deine Nachricht ist angekommen.';
+        status.style.color = 'var(--color-grass)';
+        form.reset();
+        setRating(0);
+        setTimeout(closeModal, 1600);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        status.textContent = data?.errors?.[0]?.message || 'Etwas ist schiefgelaufen. Bitte per E-Mail melden.';
+        status.style.color = 'var(--color-coral-ink)';
+      }
+    } catch {
+      status.textContent = 'Etwas ist schiefgelaufen. Bitte per E-Mail melden.';
+      status.style.color = 'var(--color-coral-ink)';
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  .fw-trigger {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 50;
+    box-shadow: var(--shadow-lift);
+  }
+  @media (max-width: 640px) {
+    .fw-trigger-label { display: none; }
+    .fw-trigger { padding: 0.9rem; min-width: 3.5rem; }
+  }
+
+  .fw-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: color-mix(in oklab, var(--color-ink) 45%, transparent);
+    backdrop-filter: blur(2px);
+  }
+
+  .fw-dialog {
+    position: fixed;
+    z-index: 61;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(34rem, calc(100vw - 2rem));
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lift);
+    padding: 1.75rem;
+  }
+  @media (max-width: 480px) {
+    .fw-dialog { padding: 1.25rem; }
+  }
+
+  .fw-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: grid;
+    place-items: center;
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 999px;
+    color: var(--color-muted);
+    transition: background-color 0.15s;
+  }
+  .fw-close:hover { background: var(--color-surface-2); color: var(--color-ink); }
+
+  .fw-head { padding-right: 2.5rem; }
+
+  .fw-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    padding: 0.3rem;
+    background: var(--color-surface-2);
+    border-radius: 999px;
+  }
+  .fw-tab {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--color-muted);
+    transition: background-color 0.15s, color 0.15s, box-shadow 0.15s;
+  }
+  .fw-tab.is-active { background: var(--color-surface); color: var(--color-brand-600); box-shadow: var(--shadow-soft); }
+
+  .fw-stars-block { margin-top: 1.5rem; }
+  .fw-stars { display: flex; gap: 0.35rem; }
+  .fw-star {
+    color: var(--color-line-strong);
+    transition: transform 0.15s var(--ease), color 0.15s;
+  }
+  .fw-star:hover { color: var(--color-sun); transform: scale(1.15); }
+  .fw-star.is-filled { color: var(--color-sun); }
+
+  form#fw-form { margin-top: 0.25rem; }
+</style>
