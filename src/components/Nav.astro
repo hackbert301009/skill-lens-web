@@ -7,7 +7,7 @@ const isActive = (p: string) => (p === '/' ? path === '/' : path.startsWith(p));
 
 const links = [
   { href: '/', label: 'Start' },
-  { href: '/funktionen', label: 'So funktioniert es' },
+  { href: '/funktionen', label: 'Funktionen' },
   { href: '/fuer-wen', label: 'Für wen' },
   { href: '/download', label: 'App holen' },
   { href: '/motivation', label: 'Motivation' },
@@ -19,14 +19,14 @@ const links = [
   <nav class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-3" aria-label="Hauptnavigation">
     <a href="/" class="rounded-lg" aria-label="Skill-Lens Startseite"><Logo /></a>
 
-    <div class="hidden items-center gap-1 lg:flex">
+    <div class="hidden items-center gap-1 xl:flex">
       {
         links.map((l) => (
           <a
             href={l.href}
             aria-current={isActive(l.href) ? 'page' : undefined}
             class:list={[
-              'rounded-full px-4 py-2 font-display font-semibold no-underline transition-colors',
+              'whitespace-nowrap rounded-full px-3.5 py-2 font-display font-semibold no-underline transition-colors',
               isActive(l.href) ? 'bg-brand-soft text-brand-600' : 'text-ink hover:bg-surface-2',
             ]}
           >
@@ -47,17 +47,22 @@ const links = [
 
       <button
         id="nav-toggle"
-        class="grid h-11 w-11 place-items-center rounded-full border border-line text-ink lg:hidden"
+        class="sl-nav-toggle grid h-11 w-11 place-items-center rounded-full border border-line text-ink xl:hidden"
         aria-label="Menü öffnen"
         aria-expanded="false"
         aria-controls="nav-mobile"
       >
-        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="sl-icon-menu h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+        <svg class="sl-icon-close h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
       </button>
     </div>
   </nav>
 
-  <div id="nav-mobile" class="hidden border-t border-line bg-paper lg:hidden">
+  <div id="nav-mobile" class="hidden border-t border-line bg-paper xl:hidden">
     <div class="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4">
       {
         [...links, { href: '/leichte-sprache', label: 'Leichte Sprache' }].map((l) => (
@@ -81,9 +86,31 @@ const links = [
 <script>
   const btn = document.getElementById('nav-toggle');
   const menu = document.getElementById('nav-mobile');
-  btn?.addEventListener('click', () => {
-    const open = menu?.classList.toggle('hidden') === false;
+
+  function setOpen(open: boolean) {
+    if (!btn || !menu) return;
+    menu.classList.toggle('hidden', !open);
     btn.setAttribute('aria-expanded', String(open));
     btn.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+    btn.classList.toggle('is-open', open);
+  }
+
+  btn?.addEventListener('click', () => setOpen(menu?.classList.contains('hidden') ?? false));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && btn?.getAttribute('aria-expanded') === 'true') setOpen(false);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (btn?.getAttribute('aria-expanded') !== 'true') return;
+    const target = e.target as Node;
+    if (menu?.contains(target) || btn.contains(target)) return;
+    setOpen(false);
   });
 </script>
+
+<style>
+  .sl-icon-close { display: none; }
+  .sl-nav-toggle.is-open .sl-icon-menu { display: none; }
+  .sl-nav-toggle.is-open .sl-icon-close { display: block; }
+</style>

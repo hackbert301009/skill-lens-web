@@ -66,6 +66,29 @@ const homeFeatures = features.slice(0, 6);
     </div>
   </section>
 
+  <!-- VIDEO SHOWCASE -->
+  <section class="mx-auto max-w-4xl px-5 pb-14">
+    <div class="reveal mx-auto mb-8 max-w-2xl text-center">
+      <p class="eyebrow mb-3 justify-center"><Icon name="play" class="h-5 w-5" /> Einmal sehen, sofort verstehen</p>
+      <h2 class="text-3xl sm:text-4xl">Skill-Lens in Bewegung</h2>
+      <p class="mt-4 text-xl text-muted">Ein kurzer Rundgang durch die App, bevor du sie selbst ausprobierst.</p>
+    </div>
+    <div class="reveal overflow-hidden rounded-[2rem]" style="box-shadow: var(--shadow-lift)">
+      <video
+        class="block aspect-video w-full bg-[#0e1330]"
+        controls
+        playsinline
+        preload="metadata"
+        poster="/media/skill-lens-demo-poster.jpg"
+        aria-label="Video: Skill-Lens in Aktion, ein kurzer Rundgang durch die App"
+      >
+        <source src="/media/skill-lens-demo.mp4" type="video/mp4" />
+        Dein Browser kann das Video leider nicht abspielen.
+        <a href="/media/skill-lens-demo.mp4" class="font-semibold text-brand-600">Video direkt herunterladen</a>.
+      </video>
+    </div>
+  </section>
+
   <!-- TRUST STRIP -->
   <section class="mx-auto max-w-6xl px-5 py-10">
     <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
