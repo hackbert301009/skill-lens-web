@@ -3,12 +3,14 @@ import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Icon from '../components/Icon.astro';
 
-// 🔧 Vor dem Veröffentlichen anpassen:
-// 1) Echte .apk in public/downloads/skill-lens.apk ablegen (Ordner selbst anlegen).
-// 2) Version, Dateigröße und Datum unten aktualisieren.
-const APK_PATH = '/downloads/skill-lens.apk';
+// Gehostet als GitHub-Release-Anhang (nicht im Repo selbst) — die APK liegt bei
+// ~137 MB (gebündelte On-Device-KI-Modelle für Offline-Betrieb), das
+// überschreitet GitHubs 100-MB-Limit für normale Git-Dateien.
+// Bei einer neuen App-Version: neues Release unter github.com/hackbert301009/skill-lens-web/releases
+// anlegen, APK als Anhang hochladen, den Link + Version/Größe/Datum hier aktualisieren.
+const APK_PATH = 'https://github.com/hackbert301009/skill-lens-web/releases/download/app-v1.0.0/skill-lens.apk';
 const APP_VERSION = '1.0.0';
-const APP_SIZE = '25 MB';
+const APP_SIZE = '137 MB';
 const APP_UPDATED = 'August 2026';
 
 const steps = [
