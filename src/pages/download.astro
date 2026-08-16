@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Icon from '../components/Icon.astro';
+import GuideModal from '../components/GuideModal.astro';
 
 // Gehostet als GitHub-Release-Anhang (nicht im Repo selbst) — die APK liegt bei
 // ~137 MB (gebündelte On-Device-KI-Modelle für Offline-Betrieb), das
@@ -102,6 +103,20 @@ const faqs = [
     </ol>
   </section>
 
+  <!-- GUIDE TEASER -->
+  <section class="mx-auto max-w-4xl px-5 pb-16">
+    <div class="reveal flex flex-col items-start gap-4 rounded-2xl border border-line bg-surface p-6 sm:flex-row sm:items-center sm:p-7">
+      <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#fdf0d6] text-[#8a5300]"><Icon name="report" class="h-6 w-6" /></span>
+      <div class="flex-1">
+        <h2 class="text-xl">Lieber alles noch einmal in Ruhe nachlesen?</h2>
+        <p class="mt-1 text-lg text-muted">Ersteinrichtung, die erste Aufgabe und der Betreuer-Bereich — als kurze PDF-Anleitung zum Anschauen oder Herunterladen.</p>
+      </div>
+      <button type="button" class="btn btn-primary" data-open-guide>
+        <Icon name="report" class="h-5 w-5" /> Anleitung ansehen
+      </button>
+    </div>
+  </section>
+
   <!-- DOWNLOAD CTA -->
   <section class="mx-auto max-w-4xl px-5 pb-4">
     <div class="reveal rounded-[2rem] border-2 border-brand bg-brand-soft px-6 py-14 text-center">
@@ -155,4 +170,6 @@ const faqs = [
       </div>
     </div>
   </section>
+
+  <GuideModal />
 </Base>

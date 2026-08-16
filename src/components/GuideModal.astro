@@ -1,0 +1,138 @@
+---
+// Modal mit eingebetteter PDF-Anleitung ("Erste Schritte"). Wird per
+// data-open-guide="1" auf einem beliebigen Button/Link geöffnet, analog zum
+// Muster in FeedbackWidget.astro.
+import Icon from './Icon.astro';
+
+const GUIDE_PDF = '/downloads/skill-lens-erste-schritte.pdf';
+---
+
+<div id="gm-backdrop" class="gm-backdrop" hidden></div>
+
+<div id="gm-dialog" class="gm-dialog" role="dialog" aria-modal="true" aria-labelledby="gm-title" hidden>
+  <button id="gm-close" type="button" class="gm-close" aria-label="Fenster schließen">
+    <Icon name="close" class="h-5 w-5" />
+  </button>
+
+  <div class="gm-head">
+    <p class="eyebrow mb-2"><Icon name="report" class="h-5 w-5" /> Anleitung</p>
+    <h2 id="gm-title" class="text-2xl">Erste Schritte mit Skill-Lens</h2>
+    <p class="mt-1 text-base text-muted">Einrichtung, erste Aufgabe und der Betreuer-Bereich — kurz erklärt.</p>
+  </div>
+
+  <div class="gm-frame-wrap">
+    <iframe id="gm-frame" class="gm-frame" title="Skill-Lens Anleitung (PDF)" loading="lazy"></iframe>
+  </div>
+
+  <div class="gm-actions">
+    <a href={GUIDE_PDF} download class="btn btn-secondary">
+      <Icon name="download" class="h-5 w-5" /> PDF herunterladen
+    </a>
+    <a href={GUIDE_PDF} target="_blank" rel="noopener" class="btn btn-primary">
+      In neuem Tab öffnen <Icon name="arrow" class="h-5 w-5" />
+    </a>
+  </div>
+</div>
+
+<script define:vars={{ GUIDE_PDF }}>
+  const backdrop = document.getElementById('gm-backdrop');
+  const dialog = document.getElementById('gm-dialog');
+  const closeBtn = document.getElementById('gm-close');
+  const frame = document.getElementById('gm-frame');
+  let lastFocused = null;
+  let loaded = false;
+
+  function openModal() {
+    lastFocused = document.activeElement;
+    if (!loaded) {
+      frame.src = GUIDE_PDF;
+      loaded = true;
+    }
+    backdrop.hidden = false;
+    dialog.hidden = false;
+    document.body.style.overflow = 'hidden';
+    closeBtn?.focus();
+  }
+
+  function closeModal() {
+    backdrop.hidden = true;
+    dialog.hidden = true;
+    document.body.style.overflow = '';
+    lastFocused?.focus?.();
+  }
+
+  document.addEventListener('click', (e) => {
+    const opener = e.target.closest('[data-open-guide]');
+    if (opener) {
+      e.preventDefault();
+      openModal();
+    }
+  });
+
+  closeBtn?.addEventListener('click', closeModal);
+  backdrop?.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !dialog.hidden) closeModal();
+  });
+</script>
+
+<style>
+  .gm-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: color-mix(in oklab, var(--color-ink) 45%, transparent);
+    backdrop-filter: blur(2px);
+  }
+
+  .gm-dialog {
+    position: fixed;
+    z-index: 61;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(40rem, calc(100vw - 2rem));
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lift);
+    padding: 1.75rem;
+  }
+  @media (max-width: 480px) {
+    .gm-dialog { padding: 1.25rem; }
+  }
+
+  .gm-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: grid;
+    place-items: center;
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 999px;
+    color: var(--color-muted);
+    transition: background-color 0.15s;
+  }
+  .gm-close:hover { background: var(--color-surface-2); color: var(--color-ink); }
+
+  .gm-head { padding-right: 2.5rem; }
+
+  .gm-frame-wrap {
+    margin-top: 1.25rem;
+    border-radius: var(--radius-md, 1rem);
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    background: var(--color-surface-2);
+    height: min(60vh, 32rem);
+  }
+  .gm-frame { width: 100%; height: 100%; border: 0; }
+
+  .gm-actions {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+</style>
