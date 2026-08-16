@@ -7,6 +7,15 @@ import { getCollection } from 'astro:content';
 const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const dateFormatter = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
+const monthFormatter = new Intl.DateTimeFormat('de-DE', { month: 'long', year: 'numeric' });
+
+const monthKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+
+// Distinct months, newest first, for the filter chips — derived from the
+// posts themselves so a new month only ever shows up once a post exists in it.
+const months = [...new Map(posts.map((p) => [monthKey(p.data.date), p.data.date])).entries()].map(
+  ([key, date]) => ({ key, label: monthFormatter.format(date) }),
+);
 ---
 
 <Base
@@ -21,9 +30,22 @@ const dateFormatter = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 
   />
 
   <section class="mx-auto max-w-3xl px-5 pb-24">
-    <div class="flex flex-col gap-6">
+    {months.length > 1 && (
+      <div class="reveal mb-8 flex flex-wrap gap-2" role="group" aria-label="Nach Monat filtern">
+        <button type="button" class="blog-filter is-active" data-month-filter="all">Alle</button>
+        {months.map((m) => (
+          <button type="button" class="blog-filter" data-month-filter={m.key}>{m.label}</button>
+        ))}
+      </div>
+    )}
+
+    <div class="flex flex-col gap-6" id="blog-list">
       {posts.map((post) => (
-        <a href={`/blog/${post.id}/`} class="card reveal block p-7 transition hover:-translate-y-0.5 hover:shadow-lift">
+        <a
+          href={`/blog/${post.id}/`}
+          class="blog-entry card reveal block p-7 transition hover:-translate-y-0.5 hover:shadow-lift"
+          data-month={monthKey(post.data.date)}
+        >
           <div class="flex flex-wrap items-center gap-3">
             {post.data.version && (
               <span class="chip"><Icon name="star" class="h-4 w-4 text-brand-600" /> Version {post.data.version}</span>
@@ -40,5 +62,57 @@ const dateFormatter = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 
         <p class="text-lg text-muted">Noch keine Einträge. Der erste folgt mit der nächsten Version.</p>
       )}
     </div>
+
+    <p id="blog-empty" class="text-lg text-muted" hidden>Für diesen Monat gibt es noch keine Einträge.</p>
   </section>
 </Base>
+
+<script>
+  (function () {
+    const filters = Array.from(document.querySelectorAll<HTMLButtonElement>('.blog-filter'));
+    const entries = Array.from(document.querySelectorAll<HTMLElement>('.blog-entry'));
+    const empty = document.getElementById('blog-empty');
+    if (!filters.length) return;
+
+    function applyFilter(month: string) {
+      let visible = 0;
+      entries.forEach((entry) => {
+        const match = month === 'all' || entry.dataset.month === month;
+        entry.hidden = !match;
+        if (match) visible += 1;
+      });
+      if (empty) empty.hidden = visible > 0;
+      filters.forEach((btn) => btn.classList.toggle('is-active', btn.dataset.monthFilter === month));
+    }
+
+    filters.forEach((btn) => {
+      btn.addEventListener('click', () => applyFilter(btn.dataset.monthFilter ?? 'all'));
+    });
+  })();
+</script>
+
+<style>
+  .blog-filter {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    color: var(--color-muted);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.15s var(--ease), color 0.15s var(--ease), border-color 0.15s var(--ease);
+  }
+  .blog-filter:hover {
+    border-color: var(--color-brand);
+    color: var(--color-brand-600);
+  }
+  .blog-filter.is-active {
+    background: var(--color-brand);
+    border-color: var(--color-brand);
+    color: white;
+  }
+</style>
