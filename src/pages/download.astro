@@ -4,42 +4,42 @@ import PageHeader from '../components/PageHeader.astro';
 import Icon from '../components/Icon.astro';
 import GuideModal from '../components/GuideModal.astro';
 
-// Gehostet als GitHub-Release-Anhang (nicht im Repo selbst) — die APK liegt bei
-// ~137 MB (gebündelte On-Device-KI-Modelle für Offline-Betrieb), das
+// Gehostet als GitHub-Release-Anhaenge (nicht im Repo selbst) — jede APK liegt
+// bei ~137 MB (gebündelte On-Device-KI-Modelle für Offline-Betrieb), das
 // überschreitet GitHubs 100-MB-Limit für normale Git-Dateien.
 // Bei einer neuen App-Version: neues Release unter github.com/hackbert301009/skill-lens-web/releases
-// anlegen, APK als Anhang hochladen, den Link + Version/Größe/Datum hier aktualisieren.
-const APK_PATH = 'https://github.com/hackbert301009/skill-lens-web/releases/download/app-v1.1.0/skill-lens.apk';
-const APP_VERSION = '1.1.0';
+// anlegen, alle drei Profil-APKs als Anhang hochladen, die drei Pfade + Version/Größe/Datum hier aktualisieren.
+const APP_VERSION = '1.1.2';
 const APP_SIZE = '137 MB';
-const APP_UPDATED = 'August 2026';
+const APP_UPDATED = 'September 2026';
+const RELEASE_BASE = 'https://github.com/hackbert301009/skill-lens-web/releases/download/app-v1.1.2';
+const PRIVATE_APK_PATH = `${RELEASE_BASE}/skill-lens-private.apk`;
 
 // Skill-Lens gibt es als drei Varianten derselben App (Schule/Werkstatt/Privat
 // unterscheiden sich z. B. darin, ob Klassenraum-Werkzeuge wie Sammel-Import
-// und Mehrfach-Zuweisung sichtbar sind). Aktuell zeigt jede Karte noch auf
-// dieselbe Datei — sobald die profil-eigenen Builds vorliegen, hier je Profil
-// den eigenen APK_PATH eintragen.
+// und Mehrfach-Zuweisung sichtbar sind). Seit v1.1.2 hat jedes Profil seinen
+// eigenen Build.
 const profiles = [
   {
     icon: 'book' as const,
     title: 'Schule',
     text: 'Für den Klassenraum: mehrere Teilnehmende auf einmal anlegen und Aufgaben gleichzeitig zuweisen.',
     buttonLabel: 'Schulversion',
-    apkPath: APK_PATH,
+    apkPath: `${RELEASE_BASE}/skill-lens-school.apk`,
   },
   {
     icon: 'routine' as const,
     title: 'Werkstatt',
     text: 'Für Werkstätten und Gruppenangebote: dieselben Klassenraum-Werkzeuge wie die Schul-Version.',
     buttonLabel: 'Werkstattversion',
-    apkPath: APK_PATH,
+    apkPath: `${RELEASE_BASE}/skill-lens-werkstatt.apk`,
   },
   {
     icon: 'heart' as const,
     title: 'Privat & Familie',
     text: 'Für zu Hause: ein ruhigeres Grundgerüst, ohne die Werkzeuge für viele Teilnehmende auf einmal.',
     buttonLabel: 'Privatversion',
-    apkPath: APK_PATH,
+    apkPath: PRIVATE_APK_PATH,
   },
 ];
 
@@ -176,7 +176,7 @@ const faqs = [
       </p>
       <h2 class="mt-5 text-3xl sm:text-4xl">Nicht sicher? Einfach diese Version nehmen</h2>
       <p class="mx-auto mt-3 max-w-md text-xl text-muted">Kostenlos · Für Android · Ohne Konto</p>
-      <a class="btn btn-primary mt-8 text-lg" href={APK_PATH} download>
+      <a class="btn btn-primary mt-8 text-lg" href={PRIVATE_APK_PATH} download>
         <Icon name="download" class="h-5 w-5" /> Skill-Lens herunterladen
       </a>
       <p class="mt-4 text-base text-muted">Version {APP_VERSION} · ca. {APP_SIZE} · Stand {APP_UPDATED}</p>
