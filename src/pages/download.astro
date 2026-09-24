@@ -9,35 +9,35 @@ import GuideModal from '../components/GuideModal.astro';
 // überschreitet GitHubs 100-MB-Limit für normale Git-Dateien.
 // Bei einer neuen App-Version: neues Release unter github.com/hackbert301009/skill-lens-web/releases
 // anlegen, alle drei Profil-APKs als Anhang hochladen, die drei Pfade + Version/Größe/Datum hier aktualisieren.
-const APP_VERSION = '1.1.2';
+const APP_VERSION = '1.2.0';
 const APP_SIZE = '137 MB';
 const APP_UPDATED = 'September 2026';
-const RELEASE_BASE = 'https://github.com/hackbert301009/skill-lens-web/releases/download/app-v1.1.2';
+const RELEASE_BASE = 'https://github.com/hackbert301009/skill-lens-web/releases/download/app-v1.2.0';
 const PRIVATE_APK_PATH = `${RELEASE_BASE}/skill-lens-private.apk`;
 
 // Skill-Lens gibt es als drei Varianten derselben App (Schule/Werkstatt/Privat
 // unterscheiden sich z. B. darin, ob Klassenraum-Werkzeuge wie Sammel-Import
 // und Mehrfach-Zuweisung sichtbar sind). Seit v1.1.2 hat jedes Profil seinen
-// eigenen Build.
+// eigenen Build, seit v1.2.0 unterscheiden sie sich auch inhaltlich.
 const profiles = [
   {
     icon: 'book' as const,
     title: 'Schule',
-    text: 'Für den Klassenraum: mehrere Teilnehmende auf einmal anlegen und Aufgaben gleichzeitig zuweisen.',
+    text: 'Für den Klassenraum: mehrere Teilnehmende auf einmal anlegen, Aufgaben gleichzeitig zuweisen und im Bericht festhalten, wer begleitet hat.',
     buttonLabel: 'Schulversion',
     apkPath: `${RELEASE_BASE}/skill-lens-school.apk`,
   },
   {
     icon: 'routine' as const,
     title: 'Werkstatt',
-    text: 'Für Werkstätten und Gruppenangebote: dieselben Klassenraum-Werkzeuge wie die Schul-Version.',
+    text: 'Für Werkstätten und Gruppenangebote: alle Gruppen-Werkzeuge, dazu die Tagesleistung statt der Wochen-Lernkurve.',
     buttonLabel: 'Werkstattversion',
     apkPath: `${RELEASE_BASE}/skill-lens-werkstatt.apk`,
   },
   {
     icon: 'heart' as const,
     title: 'Privat & Familie',
-    text: 'Für zu Hause: ein ruhigeres Grundgerüst, ohne die Werkzeuge für viele Teilnehmende auf einmal.',
+    text: 'Für zu Hause: ein ruhiger Wochenrückblick statt Nachweis-Auswertung, ohne die Werkzeuge für viele Teilnehmende.',
     buttonLabel: 'Privatversion',
     apkPath: PRIVATE_APK_PATH,
   },
