@@ -50,7 +50,10 @@ const data = {
   import { RELEASES_API, sumApkDownloads, toDisplayCount, formatCount } from '../data/downloads';
 
   const CACHE_KEY = 'sl-downloads';
-  const CACHE_TTL = 10 * 60 * 1000; // 10 Minuten, schont das Abruflimit von GitHub
+  // Kurz halten: GitHub selbst cacht die Antwort 60 Sekunden, und ein zu langer
+  // Cache ließe den Zähler beim Neuladen fälschlich stehenbleiben. Das
+  // Abruflimit (60 anonyme Abrufe je Stunde und IP) bleibt damit locker gewahrt.
+  const CACHE_TTL = 2 * 60 * 1000;
 
   const counters = document.querySelectorAll<HTMLElement>('[data-dl-counter]');
 
@@ -101,9 +104,12 @@ const data = {
       }
     };
 
+    const built = Number(counters[0]!.dataset.dlCurrent ?? '0');
+
     const refresh = async () => {
       const cached = readCache();
-      if (cached !== null) {
+      // Ein Cache-Wert unter dem frisch gebauten Stand ist veraltet — verwerfen.
+      if (cached !== null && cached >= built) {
         show(cached);
         return;
       }
