@@ -4,6 +4,7 @@ import Icon from '../components/Icon.astro';
 import PhoneFrame from '../components/PhoneFrame.astro';
 import { steps, features, tasks, editions } from '../data/site.ts';
 import shotStart from '../assets/shots/shot-start.png';
+import DownloadCount from '../components/DownloadCount.astro';
 
 const toneClass: Record<string, string> = {
   grass: 'text-grass bg-grass-soft',
@@ -47,6 +48,7 @@ const homeFeatures = features.slice(0, 6);
           <li class="chip"><Icon name="voice" class="h-5 w-5 text-brand-600" /> Leichte Sprache</li>
           <li class="chip"><Icon name="tap" class="h-5 w-5 text-coral-ink" /> Große Knöpfe</li>
           <li class="chip"><Icon name="report" class="h-5 w-5 text-brand-600" /> Berichte für Betreuende</li>
+          <li><DownloadCount variant="chip" /></li>
         </ul>
 
         <p class="mt-6 inline-flex items-center gap-2 rounded-full bg-grass-soft px-4 py-2 font-semibold text-grass">

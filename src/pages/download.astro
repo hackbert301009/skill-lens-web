@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Icon from '../components/Icon.astro';
 import GuideModal from '../components/GuideModal.astro';
+import DownloadCount from '../components/DownloadCount.astro';
 
 // Gehostet als GitHub-Release-Anhaenge (nicht im Repo selbst) — jede APK liegt
 // bei ~137 MB (gebündelte On-Device-KI-Modelle für Offline-Betrieb), das
@@ -181,6 +182,11 @@ const faqs = [
       </a>
       <p class="mt-4 text-base text-muted">Version {APP_VERSION} · ca. {APP_SIZE} · Stand {APP_UPDATED}</p>
     </div>
+  </section>
+
+  <!-- DOWNLOAD COUNT -->
+  <section class="mx-auto max-w-4xl px-5 pt-10">
+    <DownloadCount class="reveal" />
   </section>
 
   <!-- FAQ -->

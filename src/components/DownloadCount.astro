@@ -1,0 +1,126 @@
+---
+// Zeigt, wie oft Skill-Lens heruntergeladen wurde.
+// Die Zahl stammt von GitHub (siehe src/data/downloads.ts): serverseitig
+// gezählt, öffentlich einsehbar, für Besuchende nicht veränderbar.
+import Icon from './Icon.astro';
+import { fetchDownloadCount, formatCount, RELEASES_URL } from '../data/downloads';
+
+interface Props {
+  /** 'card' = eigener Kasten mit Erklärung, 'chip' = kleine Pille für Listen. */
+  variant?: 'card' | 'chip';
+  class?: string;
+}
+const { variant = 'card', class: cls = '' } = Astro.props;
+
+const count = await fetchDownloadCount();
+const formatted = formatCount(count);
+
+// Markierung fürs Live-Nachladen im Browser; data-dl-current ist der Startwert,
+// von dem aus das Skript weiterzählt.
+const data = {
+  'data-dl-counter': '',
+  'data-dl-current': String(count),
+};
+---
+
+{variant === 'chip' ? (
+  <span class={`chip ${cls}`} {...data}>
+    <Icon name="download" class="h-5 w-5 text-brand-600" />
+    <span data-dl-value>{formatted}</span> Downloads
+  </span>
+) : (
+  <div class={`card flex flex-col items-start gap-5 p-6 sm:flex-row sm:items-center sm:p-7 ${cls}`} {...data}>
+    <span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-grass-soft text-grass">
+      <Icon name="download" class="h-7 w-7" />
+    </span>
+    <div class="flex-1">
+      <p class="font-display text-3xl font-bold leading-tight sm:text-4xl">
+        Schon <span class="text-brand-600" data-dl-value>{formatted}</span> Mal heruntergeladen
+      </p>
+      <p class="mt-2 text-lg text-muted">
+        Diese Zahl zählt GitHub selbst mit, jedes Mal wenn jemand die App-Datei lädt.
+        Ich kann sie nicht schönrechnen und niemand kann sie hochklicken:
+        <a href={RELEASES_URL} rel="noopener" class="font-semibold text-brand-600">du kannst sie dort selbst nachsehen</a>.
+      </p>
+    </div>
+  </div>
+)}
+
+<script>
+  import { RELEASES_API, sumApkDownloads, toDisplayCount, formatCount } from '../data/downloads';
+
+  const CACHE_KEY = 'sl-downloads';
+  const CACHE_TTL = 10 * 60 * 1000; // 10 Minuten, schont das Abruflimit von GitHub
+
+  const counters = document.querySelectorAll<HTMLElement>('[data-dl-counter]');
+
+  if (counters.length > 0) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const paint = (node: HTMLElement, value: number) => {
+      for (const out of node.querySelectorAll('[data-dl-value]')) out.textContent = formatCount(value);
+    };
+
+    const show = (value: number) => {
+      for (const node of counters) {
+        const from = Number(node.dataset.dlCurrent ?? '0');
+        node.dataset.dlCurrent = String(value);
+        if (reduceMotion || from === value || !Number.isFinite(from)) {
+          paint(node, value);
+          continue;
+        }
+        // Kurz hochzählen, damit die Änderung ruhig sichtbar wird.
+        const start = performance.now();
+        const step = (now: number) => {
+          const t = Math.min(1, (now - start) / 800);
+          const eased = 1 - Math.pow(1 - t, 3);
+          paint(node, Math.round(from + (value - from) * eased));
+          if (t < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }
+    };
+
+    const readCache = (): number | null => {
+      try {
+        const raw = sessionStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const { value, at } = JSON.parse(raw) as { value: number; at: number };
+        if (!Number.isFinite(value) || Date.now() - at > CACHE_TTL) return null;
+        return value;
+      } catch {
+        return null;
+      }
+    };
+
+    const writeCache = (value: number) => {
+      try {
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ value, at: Date.now() }));
+      } catch {
+        /* privater Modus o. Ä. — der gebaute Wert reicht auch so */
+      }
+    };
+
+    const refresh = async () => {
+      const cached = readCache();
+      if (cached !== null) {
+        show(cached);
+        return;
+      }
+      try {
+        const res = await fetch(RELEASES_API, {
+          headers: { Accept: 'application/vnd.github+json' },
+          signal: AbortSignal.timeout(8000),
+        });
+        if (!res.ok) return; // z. B. Abruflimit erreicht: gebauter Wert bleibt stehen
+        const value = toDisplayCount(sumApkDownloads(await res.json()));
+        writeCache(value);
+        show(value);
+      } catch {
+        /* offline oder blockiert: der beim Bauen gesetzte Wert bleibt sichtbar */
+      }
+    };
+
+    refresh();
+  }
+</script>

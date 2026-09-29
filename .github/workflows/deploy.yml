@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Täglicher Neubau: der Download-Zähler wird beim Bauen fest in die Seite
+  # geschrieben, damit er auch ohne JavaScript stimmt. Der Lauf hält ihn aktuell.
+  schedule:
+    - cron: '17 4 * * *'
 
 permissions:
   contents: read
